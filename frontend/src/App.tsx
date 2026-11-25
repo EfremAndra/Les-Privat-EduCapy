@@ -22,7 +22,7 @@ const DashboardLayout = () => {
 
 
 
-
+import ManajemenPelajaran from "./pages/admin/ManajemenPelajaran";
 
 
 
