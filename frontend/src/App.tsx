@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import {
   Routes,
@@ -20,6 +19,7 @@ import AdminDashboard from "./pages/admin/AdminDashboard";
 
 import ManajemenMurid from "@/pages/admin/ManajemenMurid";
 import ManajemenGuru from "@/pages/admin/ManajemenGuru";
+import ManajemenPelajaran from "@/pages/admin/ManajemenPelajaran";
 
 import { getRoleFromToken } from "@/lib/utils";
 
@@ -153,6 +153,11 @@ function App() {
             <Route
               path="/admin/manajemen-guru"
               element={<ManajemenGuru />}
+            />
+
+            <Route
+              path="/admin/manajemen-pelajaran"
+              element={<ManajemenPelajaran />}
             />
           </Route>
         </Route>
