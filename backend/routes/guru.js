@@ -18,7 +18,97 @@
 
 
 
+// ----- Jdawal kesediaan Guru -----
+router.post("/kesediaan", async (req, res) => {
+  // extract payload dari frontend
+  const { tanggal_awal, tanggal_akhir, jadwal_harian } = req.body;
+  // ambil id guru dari database
+  const id_guru = req.user.id_user;
 
+  if (
+    !tanggal_awal ||
+    !tanggal_akhir ||
+    !jadwal_harian ||
+    !Array.isArray(jadwal_harian)
+  ) {
+    return res.status(400).json({ message: "Lengkapi data yang diperlukan!" });
+  }
+  const connection = await db.getConnection();
+
+  try {
+    await connection.beginTransaction();
+
+    // Ambil keahlian guru (id_mapel)
+    const [keahlianRows] = await connection.query(
+      "SELECT id_mapel FROM keahlian WHERE id_guru = ?",
+      [id_guru],
+    );
+
+    if (keahlianRows.length === 0) {
+      await connection.rollback();
+      return res.status(400).json({
+        message:
+          "Anda belum mendaftarkan keahlian mengajar! Silahkan hubungi admin.",
+      });
+    }
+
+    const mapelIds = keahlianRows.map((row) => row.id_mapel);
+
+    // Loop untuk setiap keahlian yang dimiliki guru
+    for (const id_mapel of mapelIds) {
+      // insert ke table jadwal_kesediaan
+      const insertKesediaan = `
+            INSERT INTO jadwal_kesediaan (id_guru, id_mapel, tanggal_awal_bersedia, tanggal_akhir_bersedia) 
+            VALUES (?, ?, ?, ?)
+        `;
+      // eksekusi query insert kesediaan mengajar dengan parameter
+      const [kesediaanResult] = await connection.query(insertKesediaan, [
+        id_guru,
+        id_mapel,
+        tanggal_awal,
+        tanggal_akhir,
+      ]);
+      const id_kesediaan = kesediaanResult.insertId;
+
+      // buat array jadwalData untuk handle masalah ketika dalam 1 hari terdapat 2 kesediaan yang dipisahkan waktu istirahat misalnya
+      const jadwalData = [];
+      for (const hariItem of jadwal_harian) {
+        const { hari, slots } = hariItem;
+
+        if (slots && Array.isArray(slots)) {
+          for (const slot of slots) {
+            // push tiap data ke array
+            jadwalData.push([
+              id_kesediaan,
+              hari,
+              slot.jam_mulai,
+              slot.jam_selesai,
+            ]);
+          }
+        }
+      }
+
+      // query insert ke table jadwal untuk jadwal kesediaan guru
+      if (jadwalData.length > 0) {
+        const insertJadwal = `INSERT INTO jadwal (id_kesediaan, hari_mengajar, jam_mulai, jam_selesai) VALUES ?`;
+        await connection.query(insertJadwal, [jadwalData]);
+      }
+    }
+
+    await connection.commit();
+
+    res.status(201).json({
+      status: "success",
+      message: "Jadwal berhasil disimpan untuk semua keahlian Anda",
+    });
+  } catch (err) {
+    await connection.rollback();
+    console.error(err);
+    res.status(500).json({ message: "Terjadi kesalahan pada server" });
+  } finally {
+    connection.release();
+  }
+});
 
 
 

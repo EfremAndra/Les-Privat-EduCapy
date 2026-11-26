@@ -15,6 +15,7 @@ import Sidebar from "./component/ui/sidebar";
 
 import MainPage from "./pages/murid/MainPages";
 import DashboardPage from "./pages/guru/DashboardPage";
+import KetersediaanPage from "./pages/guru/KetersediaanPage";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 
 import ManajemenMurid from "@/pages/admin/ManajemenMurid";
@@ -138,6 +139,10 @@ function App() {
           <Route element={<DashboardLayout />}>
             <Route path="/guru" element={<DashboardPage />} />
           </Route>
+             <Route
+              path="/guru/ketersediaan-jadwal"
+              element={<KetersediaanPage />}
+            />
         </Route>
 
         {/* Admin route */}
