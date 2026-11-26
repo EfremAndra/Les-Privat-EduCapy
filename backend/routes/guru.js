@@ -301,6 +301,40 @@
 
 
 
+const express = require("express");
+const db = require("../config/db");
+const { verifyToken } = require("../middlewares/authMiddleware");
+
+const router = express.Router();
+
+// Semua endpoint guru membutuhkan token yang valid.
+router.use(verifyToken);
+
+// Mengambil daftar pendaftaran murid yang ditangani guru dengan pagination.
+router.get("/daftar-booking", async (req, res) => {
+  const id_guru = req.user.id_user;
+  const page = Math.max(Number.parseInt(req.query.page, 10) || 1, 1);
+  const limit = Math.min(
+    Math.max(Number.parseInt(req.query.limit, 10) || 10, 1),
+    100,
+  );
+  const offset = (page - 1) * limit;
+  const search =
+    typeof req.query.search === "string" ? req.query.search.trim() : "";
+
+  let countMurid = `
+    SELECT COUNT(*) AS total_items
+    FROM pendaftaran_item pi
+    JOIN pendaftaran p ON pi.id_daftar = p.id_daftar
+    JOIN user u ON p.id_murid = u.id_user
+    JOIN mata_pelajaran mp ON pi.id_mapel = mp.id_mapel
+    JOIN jadwal j ON pi.id_jadwal = j.id_jadwal
+    JOIN jadwal_kesediaan jk ON j.id_kesediaan = jk.id_kesediaan
+    WHERE jk.id_guru = ?
+  `;
+  const countParams = [id_guru];
+
+  try {
     // query untuk mengambil data pendaftaran yang terdaftar
     let dataQuery = `
             SELECT 

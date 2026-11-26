@@ -146,8 +146,8 @@ router.get("/mata-pelajaran", async (req, res) => {
   try {
     // query untuk mendapatkan mapel yang diajar oleh seluruh guru
     const query = `
-      SELECT 
-        MIN(mp.id_mapel) AS id, 
+      SELECT
+        MIN(mp.id_mapel) AS id,
         mp.nama,
         tp.jenjang,
         GROUP_CONCAT(DISTINCT u.nama SEPARATOR ', ') AS pengajar
