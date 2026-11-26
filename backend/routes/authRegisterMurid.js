@@ -1,0 +1,88 @@
+const express = require("express");
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
+const db = require("../config/db");
+const router = express.Router();
+
+// secret key untuk JWT
+const JWT_SECRET = process.env.JWT_SECRET;
+
+// ----- REGISTER USER (KHUSUS MURID) -----
+router.post("/register", async (req, res) => {
+  const { nama, email, password, alamat, id_pendidikan } = req.body;
+
+  if (!nama || !email || !password || !id_pendidikan) {
+    return res.status(400).json({ message: "Lengkapi data yang diperlukan!" });
+  }
+
+  // bikin connection khusus untuk transaction
+  const connection = await db.getConnection();
+
+  try {
+    const [existingUser] = await connection.query(
+      "SELECT * FROM user where email = ?",
+      [email],
+    );
+
+    if (existingUser.length > 0) {
+      await connection.rollback();
+      connection.release();
+      return res.status(409).json({ message: "Email sudah digunakan!" });
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    await connection.beginTransaction();
+
+    // insert ke table user (role hardcoded, murid)
+    const insertUser =
+      "INSERT INTO user (nama, role, email, password, alamat) VALUES (?, ?, ?, ?, ?)";
+    const [userResult] = await connection.query(insertUser, [
+      nama,
+      "murid",
+      email,
+      hashedPassword,
+      alamat,
+    ]);
+    const newUserId = userResult.insertId;
+
+    // insert ke table murid
+    const insertMurid =
+      "INSERT INTO murid (id_murid, id_pendidikan) VALUES (?, ?)";
+    await connection.query(insertMurid, [newUserId, id_pendidikan]);
+
+    // ambil data user yang baru aja register
+    const [userData] = await connection.query(
+      `SELECT u.id_user, u.nama, u.email, u.alamat, p.jenjang, p.tingkat
+   FROM user u
+   JOIN murid m ON u.id_user = m.id_murid
+   JOIN tingkat_pendidikan p ON m.id_pendidikan = p.id_pendidikan
+   WHERE u.id_user = ?`,
+      [newUserId],
+    );
+    // generate token
+    const token = jwt.sign(
+      { id_user: newUserId, role: "murid", nama: nama },
+      JWT_SECRET,
+      { expiresIn: "24h" },
+    );
+    // commit jika transaction berhasil
+    await connection.commit();
+
+    res.status(201).json({
+      message: "Registrasi murid berhasil",
+      token: token,
+      data: userData[0],
+    });
+  } catch (err) {
+    // kalo ada error cancel semua perubahan
+    await connection.rollback();
+    console.error("Transaction error: ", err);
+    res.status(500).json({ message: "Terjadi kesalahan pada server" });
+  } finally {
+    // kembalikan connection ke pool
+    connection.release();
+  }
+});
+
+module.exports = router;

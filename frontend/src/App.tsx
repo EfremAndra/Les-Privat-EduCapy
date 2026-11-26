@@ -15,7 +15,7 @@ import Sidebar from "./component/ui/sidebar";
 import MainPage from "./pages/murid/MainPages";
 import DashboardPage from "./pages/guru/DashboardPage";
 import AdminDashboard from "./pages/admin/AdminDashboard";
-
+import ManajemenMurid from "@/pages/admin/ManajemenMurid";
 import { getRoleFromToken } from "@/lib/utils";
 
 const DashboardLayout = () => {
@@ -139,9 +139,13 @@ function App() {
         <Route element={<AdminRoute />}>
           <Route element={<DashboardLayout />}>
             <Route path="/admin" element={<AdminDashboard />} />
+
+            <Route
+              path="/admin/manajemen-murid"
+              element={<ManajemenMurid />}
+            />
           </Route>
         </Route>
-      </Routes>
     </BrowserRouter>
   );
 }
