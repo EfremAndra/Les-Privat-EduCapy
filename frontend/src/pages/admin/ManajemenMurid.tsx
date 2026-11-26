@@ -27,7 +27,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Field, FieldGroup } from "@/components/ui/field";
+import { Field } from "@/components/ui/field";
 import { Label } from "@/components/ui/label";
 
 // mendefinisikan tipe data sesuai query
@@ -78,8 +78,8 @@ export default function ManajemenMurid() {
 
       const data = await response.json();
       setStudents(data);
-    } catch (err: any) {
-      console.error("Error fetching data murid:", error);
+    } catch (err) {
+      console.error("Error fetching data murid:", err);
     } finally {
       setIsLoading(false);
     }

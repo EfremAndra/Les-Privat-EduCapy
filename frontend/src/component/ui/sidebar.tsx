@@ -1,7 +1,6 @@
 import {
   CalendarDays,
   Settings,
-  School,
   LayoutDashboard,
   CalendarCheck,
   Compass,
@@ -11,7 +10,6 @@ import {
 import {
   FaListUl,
   FaRegCircleQuestion,
-  FaRegSquareCaretLeft,
 } from "react-icons/fa6";
 import { type ElementType } from "react";
 import Logo from "@/assets/logo-educapy 1.png";

@@ -144,3 +144,7 @@ export default function MainPages() {
             </div>
           </div>
         </div>
+      </div>
+    </>
+  );
+}

@@ -20,9 +20,7 @@ import {
 } from "@/components/ui/select";
 import {
   BookOpen,
-  DatabaseIcon,
   Loader2,
-  MoreVertical,
   Plus,
   Users,
 } from "lucide-react";

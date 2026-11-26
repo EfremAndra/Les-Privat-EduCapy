@@ -1,9 +1,9 @@
-import { Search, Bell, LogOut, PanelLeft } from "lucide-react";
+import { LogOut, PanelLeft } from "lucide-react";
 import logo from "@/assets/logo-educapy 1.png";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { getNameFromToken, clearAuth } from "@/lib/utils";
-import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 
 interface UpperMenuProps {
   onCloseSidebar: () => void;
