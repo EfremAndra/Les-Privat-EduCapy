@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import {
   Routes,
@@ -12,10 +13,14 @@ import AdminLogin from "./pages/admin/AdminLogin";
 
 import UpperMenu from "./component/ui/uppermenu";
 import Sidebar from "./component/ui/sidebar";
+
 import MainPage from "./pages/murid/MainPages";
 import DashboardPage from "./pages/guru/DashboardPage";
 import AdminDashboard from "./pages/admin/AdminDashboard";
+
 import ManajemenMurid from "@/pages/admin/ManajemenMurid";
+import ManajemenGuru from "@/pages/admin/ManajemenGuru";
+
 import { getRoleFromToken } from "@/lib/utils";
 
 const DashboardLayout = () => {
@@ -144,8 +149,14 @@ function App() {
               path="/admin/manajemen-murid"
               element={<ManajemenMurid />}
             />
+
+            <Route
+              path="/admin/manajemen-guru"
+              element={<ManajemenGuru />}
+            />
           </Route>
         </Route>
+      </Routes>
     </BrowserRouter>
   );
 }
