@@ -61,6 +61,11 @@ export default function Sidebar({ isExpanded }: SidebarProps) {
       icon: CalendarDays,
     },
     {
+      name: "manajemen kalender",
+      path: "/guru/manajemen-kalender",
+      icon: CalendarDays,
+    },
+    {
       name: "daftar booking",
       path: "/guru/daftar-booking",
       icon: FaListUl,

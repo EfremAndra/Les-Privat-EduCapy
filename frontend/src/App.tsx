@@ -17,10 +17,12 @@ import MainPage from "./pages/murid/MainPages";
 import DashboardPage from "./pages/guru/DashboardPage";
 import KetersediaanPage from "./pages/guru/KetersediaanPage";
 import AdminDashboard from "./pages/admin/AdminDashboard";
+import ManajemenKalender from "./pages/guru/ManajemenKalender";
 
 import ManajemenMurid from "@/pages/admin/ManajemenMurid";
 import ManajemenGuru from "@/pages/admin/ManajemenGuru";
 import ManajemenPelajaran from "@/pages/admin/ManajemenPelajaran";
+
 
 import { getRoleFromToken } from "@/lib/utils";
 
@@ -139,10 +141,14 @@ function App() {
           <Route element={<DashboardLayout />}>
             <Route path="/guru" element={<DashboardPage />} />
           </Route>
-             <Route
-              path="/guru/ketersediaan-jadwal"
-              element={<KetersediaanPage />}
-            />
+          <Route
+            path="/guru/ketersediaan-jadwal"
+            element={<KetersediaanPage />}
+          />
+          <Route
+            path="/guru/manajemen-kalender"
+            element={<ManajemenKalender />}
+          />
         </Route>
 
         {/* Admin route */}
