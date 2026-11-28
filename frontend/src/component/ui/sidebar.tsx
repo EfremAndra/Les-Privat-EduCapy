@@ -33,6 +33,11 @@ export default function Sidebar({ isExpanded }: SidebarProps) {
   // --- KONFIGURASI MENU MURID ---
   const menuMurid: MenuItem[] = [
     { name: "halaman utama", path: "/MainPage", icon: LayoutDashboard },
+      {
+      name: "ketersediaan jadwal",
+      path: "/guru/ketersediaan-jadwal",
+      icon: CalendarCheck,
+    },
     { name: "jadwalku", path: "/jadwal", icon: CalendarDays },
     { name: "cari kelas", path: "/cari-kelas", icon: Compass },
     {
