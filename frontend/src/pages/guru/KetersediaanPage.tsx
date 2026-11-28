@@ -1,13 +1,11 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import {
   Calendar,
   Clock,
   Trash2,
   Plus,
   GraduationCap,
-  CheckCircle2,
   AlertCircle,
-  Copy,
   ChevronRight,
   ChevronLeft,
   Save,
