@@ -93,7 +93,7 @@ export default function ManajemenPelajaran() {
       .then((res) => res.json())
       .then((data) => setDataPendidikan(data))
       .catch((err) => console.error("Gagal mengambil data: ", err));
-  });
+  }, []);
 
   const listJenjang = [...new Set(dataPendidikan.map((item) => item.jenjang))];
   const listTingkat = dataPendidikan
@@ -106,9 +106,8 @@ export default function ManajemenPelajaran() {
   };
 
   const handleJenjangChange = (value: string) => {
-    setFormData((prev) => ({ ...prev, jenjang: value, tingka: "" }));
+    setFormData((prev) => ({ ...prev, jenjang: value, tingkat: "" }));
   };
-
   const handleTingkatChange = (value: string) => {
     setFormData((prev) => ({ ...prev, tingkat: value }));
   };
